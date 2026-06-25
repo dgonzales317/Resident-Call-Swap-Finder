@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCI PM&R Call Swap Hub 2026-2027</title>
+<style>
+  :root {
+    --bg:#f8f7f5;--surface:#fff;--surface2:#f2f1ef;--border:#e0ddd8;
+    --text:#1a1917;--text2:#6b6860;--text3:#9c9a94;
+    --accent:#2563eb;--accent-bg:#eff6ff;--accent-bd:#bfdbfe;
+    --green:#16a34a;--green-bg:#f0fdf4;--green-bd:#bbf7d0;
+    --red:#dc2626;--red-bg:#fef2f2;--red-bd:#fecaca;
+    --amber:#d97706;--amber-bg:#fffbeb;--amber-bd:#fde68a;
+    --purple:#7c3aed;--purple-bg:#f5f3ff;--purple-bd:#ddd6fe;
+    --r:8px;--rs:5px;--sh:0 1px 3px rgba(0,0,0,.08);--shl:0 8px 24px rgba(0,0,0,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+  select,button{font-family:inherit;font-size:13px}
+  select{padding:6px 10px;border:1px solid var(--border);border-radius:var(--rs);background:var(--surface);color:var(--text);width:100%;cursor:pointer}
+  select:focus{outline:none;border-color:var(--accent)}
+  .hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:var(--sh);gap:10px;flex-wrap:wrap}
+  .hdr-l{display:flex;align-items:center;gap:12px}
+  .hdr-title{font-size:15px;font-weight:600}
+  .hdr-sub{font-size:11px;color:var(--text3);margin-top:1px}
+  .nav{display:flex;gap:4px;flex-wrap:wrap}
+  .nb{padding:6px 13px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-weight:500;font-size:12px;transition:all .15s}
+  .nb:hover{background:var(--surface2)}
+  .nb.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .cnt{display:inline-block;margin-left:5px;font-size:10px;padding:1px 5px;border-radius:10px;background:var(--amber);color:#fff}
+  .main{max-width:840px;margin:0 auto;padding:18px 16px 60px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+  .btn{padding:7px 14px;border-radius:var(--rs);border:1px solid var(--border);cursor:pointer;font-weight:500;font-size:12px;transition:all .15s}
+  .btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn-p:hover{background:#1d4ed8}
+  .btn-p:disabled{opacity:.4;cursor:not-allowed}
+  .btn-s{background:var(--surface);color:var(--text2)}
+  .btn-s:hover{background:var(--surface2)}
+  .btn-s:disabled{opacity:.5;cursor:not-allowed}
+  .btn-d{background:var(--red-bg);color:var(--red);border-color:var(--red-bd)}
+  .btn-d:hover{background:#fee2e2}
+  .btn-ds{background:var(--red);color:#fff;border-color:var(--red)}
+  .btn-ds:hover{background:#b91c1c}
+  .btn-ds:disabled{opacity:.5;cursor:not-allowed}
+  .btn-pdf{background:var(--green-bg);color:var(--green);border-color:var(--green-bd)}
+  .btn-pdf:hover{background:#dcfce7}
+  .btn-pdf:disabled{opacity:.5;cursor:not-allowed}
+  .bsm{padding:3px 10px;font-size:11px}
+  .badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px}
+  .bg{background:var(--green-bg);color:var(--green)}
+  .br{background:var(--red-bg);color:var(--red)}
+  .ba{background:var(--amber-bg);color:var(--amber)}
+  .bhol{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-bd);font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{padding:8px 10px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
+  td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr.sw{background:var(--amber-bg)}
+  tr.hr{background:var(--purple-bg)}
+  tr.sw.hr{background:linear-gradient(135deg,var(--amber-bg) 50%,var(--purple-bg) 100%)}
+  tr:not(.sw):not(.hr):hover{background:var(--surface2)}
+  .xd{color:var(--text3);text-decoration:line-through}
+  .curn{font-weight:600}
+  .swn{font-size:11px;color:var(--text3);margin-top:1px}
+  .holn{font-size:10px;color:var(--purple);margin-top:2px;font-weight:500}
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+  .modal{background:var(--surface);border-radius:var(--r);padding:20px;max-width:480px;width:100%;box-shadow:var(--shl);max-height:90vh;overflow-y:auto}
+  .mhdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+  .mt{font-size:15px;font-weight:600}
+  .ms{font-size:12px;color:var(--text2);margin-top:2px}
+  .xb{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text3);line-height:1;padding:2px}
+  .fl{font-size:12px;color:var(--text2);font-weight:500;display:block;margin-bottom:5px;margin-top:14px}
+  .vb{padding:10px 12px;border-radius:var(--rs);font-size:12px;line-height:1.6;margin-top:14px}
+  .vok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+  .vw{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+  .mact{display:flex;gap:8px;margin-top:16px}
+  .swbox{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--rs);padding:12px;font-size:13px;line-height:1.6;margin-bottom:14px}
+  .cfbox{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--rs);padding:12px;margin-bottom:14px}
+  .cft{font-weight:600;color:var(--red);margin-bottom:6px;font-size:13px}
+  .cfa{display:flex;gap:8px;margin-top:10px}
+  .tsn{font-size:11px;color:var(--text3);margin-top:6px}
+  .merr{font-size:12px;padding:8px 10px;border-radius:var(--rs);margin-top:10px;display:none;background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+  .mtabs{display:flex;gap:4px;margin-bottom:14px}
+  .rbox{padding:14px;border-radius:var(--r);font-size:13px}
+  .rok{background:var(--green-bg);border:1px solid var(--green-bd)}
+  .rwarn{background:var(--red-bg);border:1px solid var(--red-bd)}
+  .rh{font-weight:600;margin-bottom:10px}
+  .ri{padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px}
+  .rir{display:flex;align-items:center;gap:7px}
+  .ris{font-size:11px;color:var(--text3);margin-top:3px}
+  .sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin:10px 0 6px}
+  .rotb{border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:8px}
+  .rotv{border-left:3px solid var(--green)}
+  .rotn{border-left:3px solid var(--red)}
+  .roth{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;margin-bottom:8px}
+  .rotr{font-size:13px;margin:4px 0;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+  .rotrs{font-size:11px;color:var(--text3)}
+  .roti{font-size:12px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);color:var(--red)}
+  .fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:5px}
+  .cbi{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 8px;border-radius:var(--rs);cursor:pointer;user-select:none;border:1px solid var(--border);background:var(--surface);transition:all .1s}
+  .cbi.on{border-color:var(--accent-bd);background:var(--accent-bg);color:var(--accent)}
+  .tg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .rrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .vt{font-size:15px;font-weight:600}
+  .vs{font-size:11px;color:var(--text3);margin-top:1px}
+  .smbadge{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:500}
+  .clbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;margin-top:12px;display:block}
+  .hol-leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--purple);padding:5px 10px;background:var(--purple-bg);border:1px solid var(--purple-bd);border-radius:var(--rs);margin-bottom:10px}
+  .pdf-err{font-size:12px;color:var(--red);padding:6px 10px;background:var(--red-bg);border:1px solid var(--red-bd);border-radius:var(--rs);margin-top:8px;display:none}
+  @media(max-width:560px){.tg{grid-template-columns:1fr}.hdr{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-l">
+    <div><div class="hdr-title">UCI PM&amp;R &middot; Call Swap Hub</div><div class="hdr-sub">2026&ndash;2027 &middot; Live schedule</div></div>
+    <div id="smbadge"></div>
+  </div>
+  <nav class="nav" id="nav"></nav>
+</div>
+<div class="main" id="main"></div>
+<div class="ov" id="ov" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+<script>
+/* ═══════════════════════════════════════════════════════════
+   STORAGE KEYS — DO NOT CHANGE — changing these loses all data
+   pmr26lbm / pmr26ucip / pmr26ucic
+═══════════════════════════════════════════════════════════ */
+const KEYS={lbm:"pmr26lbm",uci_primary:"pmr26ucip",uci_consult:"pmr26ucic"};
+
+/* ═══ SCHEDULE DATA ══════════════════════════════════════════ */
+const BASE={
+  uci_primary:[
+    {d:"6/25-7/1",r:"Rallison"},{d:"7/2-7/8",r:"Martin"},{d:"7/9-7/15",r:"Vallejo"},
+    {d:"7/16-7/22",r:"Hampel"},{d:"7/23-7/29",r:"Trika"},{d:"7/30-8/5",r:"Morales"},
+    {d:"8/6-8/12",r:"Layne"},{d:"8/13-8/19",r:"Vallejo"},{d:"8/20-8/26",r:"Trika"},
+    {d:"8/27-9/2",r:"Morales"},{d:"9/3-9/9",r:"Hampel"},{d:"9/10-9/16",r:"Layne"},
+    {d:"9/17-9/23",r:"Vallejo"},{d:"9/24-9/30",r:"Trika"},{d:"10/1-10/7",r:"Hampel"},
+    {d:"10/8-10/14",r:"Morales"},{d:"10/15-10/21",r:"Vallejo"},{d:"10/22-10/28",r:"Layne"},
+    {d:"10/29-11/4",r:"Hampel"},{d:"11/5-11/11",r:"Trika"},{d:"11/12-11/18",r:"Morales"},
+    {d:"11/19-11/25",r:"Vallejo"},{d:"11/26-12/2",r:"Layne"},{d:"12/3-12/9",r:"Trika"},
+    {d:"12/10-12/16",r:"Morales"},{d:"12/17-12/23",r:"Hampel"},{d:"12/24-12/30",r:"Vallejo"},
+    {d:"1/1-1/6",r:"Morales"},{d:"1/7-1/13",r:"Layne"},{d:"1/14-1/20",r:"Hampel"},
+    {d:"1/21-1/27",r:"Morales"},{d:"1/28-2/3",r:"Layne"},{d:"2/4-2/10",r:"Trika"},
+    {d:"2/11-2/17",r:"Vallejo"},{d:"2/18-2/24",r:"Morales"},{d:"2/25-3/3",r:"Hampel"},
+    {d:"3/4-3/10",r:"Layne"},{d:"3/11-3/17",r:"Morales"},{d:"3/18-3/24",r:"Hampel"},
+    {d:"3/25-3/31",r:"Vallejo"},{d:"4/1-4/7",r:"Layne"},{d:"4/8-4/14",r:"Trika"},
+    {d:"4/15-4/21",r:"Hampel"},{d:"4/22-4/28",r:"Morales"},{d:"4/29-5/5",r:"Vallejo"},
+    {d:"5/6-5/12",r:"Layne"},{d:"5/13-5/19",r:"Hampel"},{d:"5/20-5/26",r:"Trika"},
+    {d:"5/27-6/2",r:"Morales"},{d:"6/3-6/9",r:"Vallejo"},{d:"6/10-6/16",r:"Hampel"},
+    {d:"6/17-6/23",r:"Layne"},{d:"6/24-6/30",r:"Morales"},{d:"7/1-7/6",r:"Trika"}
+  ],
+  lbm:[
+    {d:"7/9-7/15",r:"Ibrahim"},{d:"7/16-7/22",r:"Hernandez"},{d:"7/23-7/29",r:"Smith"},
+    {d:"7/30-8/5",r:"Gonzales"},{d:"8/6-8/12",r:"Barker"},{d:"8/13-8/19",r:"Rallison"},
+    {d:"8/20-8/26",r:"Smith"},{d:"8/27-9/2",r:"Nazaryan"},{d:"9/3-9/9",r:"Gonzales"},
+    {d:"9/10-9/16",r:"Hernandez"},{d:"9/17-9/23",r:"Yoo"},{d:"9/24-9/30",r:"Barker"},
+    {d:"10/1-10/7",r:"Rayes"},{d:"10/8-10/14",r:"Smith"},{d:"10/15-10/21",r:"Hernandez"},
+    {d:"10/22-10/28",r:"Gonzales"},{d:"10/29-11/4",r:"Ibrahim"},{d:"11/5-11/11",r:"Barker"},
+    {d:"11/12-11/18",r:"Nazaryan"},{d:"11/19-11/25",r:"Rallison"},{d:"11/26-12/2",r:"Martin"},
+    {d:"12/3-12/9",r:"Gonzales"},{d:"12/10-12/16",r:"Ibrahim"},{d:"12/17-12/23",r:"Yoo"},
+    {d:"12/24-12/30",r:"Nazaryan"},{d:"1/1-1/6",r:"Rayes"},{d:"1/7-1/13",r:"Smith"},
+    {d:"1/14-1/20",r:"Hernandez"},{d:"1/21-1/27",r:"Barker"},{d:"1/28-2/3",r:"Rallison"},
+    {d:"2/4-2/10",r:"Martin"},{d:"2/11-2/17",r:"Ibrahim"},{d:"2/18-2/24",r:"Gonzales"},
+    {d:"2/25-3/3",r:"Rallison"},{d:"3/4-3/10",r:"Yoo"},{d:"3/11-3/17",r:"Ibrahim"},
+    {d:"3/18-3/24",r:"Smith"},{d:"3/25-3/31",r:"Yoo"},{d:"4/1-4/7",r:"Martin"},
+    {d:"4/8-4/14",r:"Rallison"},{d:"4/15-4/21",r:"Rayes"},{d:"4/22-4/28",r:"Barker"},
+    {d:"4/29-5/5",r:"Yoo"},{d:"5/6-5/12",r:"Nazaryan"},{d:"5/13-5/19",r:"Hernandez"},
+    {d:"5/20-5/26",r:"Yoo"},{d:"5/27-6/2",r:"Martin"},{d:"6/3-6/9",r:"Rayes"},
+    {d:"6/10-6/16",r:"Nazaryan"},{d:"6/17-6/23",r:"Rayes"},{d:"6/24-6/30",r:"Martin"},
+    {d:"7/1-7/6",r:"Rallison"}
+  ],
+  uci_consult:[
+    {d:"7/9-7/15",r:"Martin"},{d:"7/16-7/22",r:"Yoo"},{d:"7/23-7/29",r:"Rallison"},
+    {d:"7/30-8/5",r:"Hampel"},{d:"8/6-8/12",r:"Rayes"},{d:"8/13-8/19",r:"Morales"},
+    {d:"8/20-8/26",r:"Layne"},{d:"8/27-9/2",r:"Vallejo"},{d:"9/3-9/9",r:"Ibrahim"},
+    {d:"9/10-9/16",r:"Nazaryan"},{d:"9/17-9/23",r:"Martin"},{d:"9/24-9/30",r:"Layne"},
+    {d:"10/1-10/7",r:"Hernandez"},{d:"10/8-10/14",r:"Gonzales"},{d:"10/15-10/21",r:"Yoo"},
+    {d:"10/22-10/28",r:"Nazaryan"},{d:"10/29-11/4",r:"Hernandez"},{d:"11/5-11/11",r:"Rallison"},
+    {d:"11/12-11/18",r:"Morales"},{d:"11/19-11/25",r:"Rayes"},{d:"11/26-12/2",r:"Smith"},
+    {d:"12/3-12/9",r:"Vallejo"},{d:"12/10-12/16",r:"Barker"},{d:"12/17-12/23",r:"Gonzales"},
+    {d:"12/24-12/30",r:"Trika"},{d:"1/1-1/6",r:"Hampel"},{d:"1/7-1/13",r:"Ibrahim"},
+    {d:"1/14-1/20",r:"Yoo"},{d:"1/21-1/27",r:"Trika"},{d:"1/28-2/3",r:"Vallejo"},
+    {d:"2/4-2/10",r:"Morales"},{d:"2/11-2/17",r:"Barker"},{d:"2/18-2/24",r:"Martin"},
+    {d:"2/25-3/3",r:"Rayes"},{d:"3/4-3/10",r:"Gonzales"},{d:"3/11-3/17",r:"Nazaryan"},
+    {d:"3/18-3/24",r:"Layne"},{d:"3/25-3/31",r:"Rayes"},{d:"4/1-4/7",r:"Morales"},
+    {d:"4/8-4/14",r:"Hernandez"},{d:"4/15-4/21",r:"Ibrahim"},{d:"4/22-4/28",r:"Smith"},
+    {d:"4/29-5/5",r:"Martin"},{d:"5/6-5/12",r:"Barker"},{d:"5/13-5/19",r:"Vallejo"},
+    {d:"5/20-5/26",r:"Rallison"},{d:"5/27-6/2",r:"Nazaryan"},{d:"6/3-6/9",r:"Layne"},
+    {d:"6/10-6/16",r:"Trika"},{d:"6/17-6/23",r:"Rallison"},{d:"6/24-6/30",r:"Hampel"},
+    {d:"7/1-7/6",r:"Yoo"}
+  ]
+};
+
+/* ═══ HOLIDAYS ═══════════════════════════════════════════════ */
+const HS={
+  8:[{nm:"Labor Day (9/7)",s:"UCI / LBVA / LBM"}],
+  13:[{nm:"Columbus Day (10/12)",s:"LBM"}],
+  17:[{nm:"Veterans Day (11/11)",s:"UCI / LBVA"}],
+  20:[{nm:"Thanksgiving (11/26)",s:"UCI / LBVA / LBM"},{nm:"Day after Thanksgiving (11/27)",s:"UCI"}],
+  24:[{nm:"Christmas Eve (12/24)",s:"UCI"},{nm:"Christmas (12/25)",s:"UCI / LBVA / LBM"}],
+  25:[{nm:"New Year's Eve (12/31)",s:"UCI"},{nm:"New Year's Day (1/1)",s:"UCI / LBVA / LBM"}],
+  27:[{nm:"MLK Day (1/18)",s:"UCI / LBVA"}],
+  31:[{nm:"Presidents' Day (2/15)",s:"UCI / LBVA"}],
+  46:[{nm:"Memorial Day (5/31)",s:"UCI / LBVA / LBM"}],
+  49:[{nm:"Juneteenth (6/18)",s:"UCI / LBVA"}],
+  51:[{nm:"Independence Day (7/5)",s:"UCI / LBVA / LBM"}]
+};
+const HOLS={lbm:HS,uci_consult:HS,uci_primary:{
+  1:[{nm:"Independence Day (7/3)",s:"UCI / LBVA / LBM"}],
+  10:[{nm:"Labor Day (9/7)",s:"UCI / LBVA / LBM"}],
+  15:[{nm:"Columbus Day (10/12)",s:"LBM"}],
+  19:[{nm:"Veterans Day (11/11)",s:"UCI / LBVA"}],
+  22:[{nm:"Thanksgiving (11/26)",s:"UCI / LBVA / LBM"},{nm:"Day after Thanksgiving (11/27)",s:"UCI"}],
+  26:[{nm:"Christmas Eve (12/24)",s:"UCI"},{nm:"Christmas (12/25)",s:"UCI / LBVA / LBM"}],
+  27:[{nm:"New Year's Eve (12/31)",s:"UCI"},{nm:"New Year's Day (1/1)",s:"UCI / LBVA / LBM"}],
+  29:[{nm:"MLK Day (1/18)",s:"UCI / LBVA"}],
+  33:[{nm:"Presidents' Day (2/15)",s:"UCI / LBVA"}],
+  48:[{nm:"Memorial Day (5/31)",s:"UCI / LBVA / LBM"}],
+  51:[{nm:"Juneteenth (6/18)",s:"UCI / LBVA"}],
+  53:[{nm:"Independence Day (7/5)",s:"UCI / LBVA / LBM"}]
+}};
+function getH(ct,i){return HOLS[ct]?.[i]||[];}
+function holChips(ct,i){return getH(ct,i).map(h=>`<span class="bhol">&#128197; ${h.nm} <span style="opacity:.65;font-weight:400">${h.s}</span></span>`).join(' ');}
+function holText(ct,i){const h=getH(ct,i);return h.length?' ['+h.map(x=>x.nm).join(', ')+']':'';}
+function holSummary(ct,i){const h=getH(ct,i);return h.length?` <span class="bhol">&#128197; ${h.map(x=>x.nm).join(' / ')}</span>`:''; }
+
+const LABELS={uci_primary:"UCI Primary Call",lbm:"LBM Call",uci_consult:"UCI Consult Call"};
+
+/* ═══ STORAGE ════════════════════════════════════════════════ */
+let HAS_SHARED=false;
+async function initStorage(){
+  if(typeof window.storage==='undefined'){HAS_SHARED=false;return;}
+  try{await window.storage.set('pmr_ping','1',true);HAS_SHARED=true;}catch{HAS_SHARED=false;}
+}
+function updateBadge(){
+  const el=document.getElementById('smbadge');if(!el)return;
+  el.innerHTML=HAS_SHARED
+    ?'<span class="smbadge" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)">&#128994; Live &mdash; syncs with all residents</span>'
+    :'<span class="smbadge" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)">&#128993; Preview &mdash; local only</span>';
+}
+async function storeGet(key){
+  if(HAS_SHARED){try{const d=await window.storage.get(key,true);return d?JSON.parse(d.value):[];}catch{return[];}}
+  try{return JSON.parse(localStorage.getItem(key)||'[]');}catch{return[];}
+}
+async function storePut(key,data){
+  if(HAS_SHARED){await window.storage.set(key,JSON.stringify(data),true);return;}
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+/* ═══ STATE ════════════════════════════════════════════════════ */
+let view='finder',sws={lbm:[],uci_primary:[],uci_consult:[]},eff={};
+let MS={ct:null,idx:null,coverBy:'',exchIdx:'',cf:false};
+let F={mode:'2way',ct:'',wIdx:'',filter:{},w1:'',w2:'',w3:''};
+
+/* ═══ HELPERS ══════════════════════════════════════════════════ */
+const pd=s=>{const[m,d]=s.trim().split('/').map(Number);return new Date(m>=6?2026:2027,m-1,d);};
+const fmtTs=ts=>new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+const fmtDate=ts=>new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+function allRes(ct){return[...new Set(BASE[ct].map(w=>w.r))].sort();}
+function buildEff(ct,swList){
+  const s=BASE[ct].map(w=>({...w,cur:w.r,switched:false,swId:null,short:null,full:null,ts:null}));
+  (swList||[]).forEach(({id,wA,wB,rA,rB,ts})=>{
+    const dA=BASE[ct][wA].d,dB=BASE[ct][wB].d;
+    s[wA]={...s[wA],cur:rB,switched:true,swId:id,short:`${rA} now covers ${dB}`,full:`${rB} covers ${dA} <-> ${rA} covers ${dB}`,ts};
+    s[wB]={...s[wB],cur:rA,switched:true,swId:id,short:`${rB} now covers ${dA}`,full:`${rB} covers ${dA} <-> ${rA} covers ${dB}`,ts};
+  });
+  return s;
+}
+function rebuildEff(){eff={lbm:buildEff('lbm',sws.lbm),uci_primary:buildEff('uci_primary',sws.uci_primary),uci_consult:buildEff('uci_consult',sws.uci_consult)};}
+function resCalls(name){return Object.entries(eff).flatMap(([ct,s])=>s.map((w,i)=>w.cur===name?{ct,i,dates:w.d}:null).filter(Boolean));}
+function isAdj(c,tCt,tIdx){if(c.ct===tCt&&c.i===tIdx)return false;return Math.abs((pd(eff[tCt][tIdx].d.split('-')[0])-pd(eff[c.ct][c.i].d.split('-')[0]))/86400000)<=13;}
+function relLbl(c,tCt,tIdx){return(pd(eff[c.ct][c.i].d.split('-')[0])-pd(eff[tCt][tIdx].d.split('-')[0]))<0?'week before':'week after';}
+function swapPairValid(holder,idx,cand,cIdx,ct){
+  if(resCalls(holder).filter(c=>!(c.ct===ct&&c.i===idx)).some(c=>isAdj(c,ct,cIdx)))return false;
+  if(resCalls(cand).filter(c=>!(c.ct===ct&&c.i===cIdx)).some(c=>isAdj(c,ct,idx)))return false;
+  return true;
+}
+function validExchWeeks(holder,idx,cand,ct){
+  return eff[ct].map((w,i)=>({...w,i})).filter(w=>w.cur===cand&&w.i!==idx&&swapPairValid(holder,idx,cand,w.i,ct));
+}
+
+/* ═══ LOAD / SAVE ══════════════════════════════════════════════ */
+async function loadAll(){
+  const r={lbm:[],uci_primary:[],uci_consult:[]};
+  for(const[ct,key]of Object.entries(KEYS))r[ct]=await storeGet(key);
+  sws=r;rebuildEff();
+}
+async function saveCt(ct){await storePut(KEYS[ct],sws[ct]);}
+
+/* ═══ NAV ═══════════════════════════════════════════════════════ */
+function renderNav(){
+  const tabs=[{id:'finder',label:'&#128269; Swap Finder'},{id:'lbm',label:'LBM Call'},{id:'uci_primary',label:'UCI Primary'},{id:'uci_consult',label:'UCI Consult'}];
+  document.getElementById('nav').innerHTML=tabs.map(t=>{
+    const c=t.id!=='finder'?sws[t.id]?.length||0:0;
+    return`<button class="nb${view===t.id?' on':''}" onclick="setView('${t.id}')">${t.label}${c>0?`<span class="cnt">${c}</span>`:''}</button>`;
+  }).join('');
+}
+function setView(v){view=v;renderNav();renderMain();}
+
+/* ═══ PDF ════════════════════════════════════════════════════ */
+function loadScript(src){return new Promise((res,rej)=>{if(document.querySelector(`script[src="${src}"]`)){res();return;}const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+async function generatePDF(ct){
+  const btn=document.getElementById('pdfbtn-'+ct);
+  const err=document.getElementById('pdferr-'+ct);
+  const orig=btn?btn.textContent:'';
+  if(btn){btn.textContent='Building...';btn.disabled=true;}
+  if(err)err.style.display='none';
+  try{
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js');
+    const{jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+    const ML=14,MR=14,MT=14,PW=215.9,PH=279.4,CW=PW-ML-MR;
+    const sched=eff[ct],swList=sws[ct]||[],label=LABELS[ct];
+    const now=new Date(),dateStr=now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    const TOTAL='{total_pages_count_string}';
+    doc.setFontSize(16);doc.setFont('helvetica','bold');doc.setTextColor(30,64,175);
+    doc.text('UCI PM&R - Call Swap Hub',ML,MT+5);
+    doc.setFontSize(12);doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
+    doc.text(label+' - 2026-2027',ML,MT+13);
+    doc.setFontSize(8.5);doc.setTextColor(120);
+    doc.text('Generated: '+dateStr+'     Switches: '+swList.length,ML,MT+20);
+    doc.setTextColor(0);doc.setDrawColor(200,200,210);doc.setLineWidth(0.4);
+    doc.line(ML,MT+23,PW-MR,MT+23);
+    function foot(data){doc.setFontSize(7.5);doc.setTextColor(150);doc.text('UCI PM&R - '+label+' | Page '+data.pageNumber+' of '+TOTAL,ML,PH-8);doc.text(dateStr,PW-MR,PH-8,{align:'right'});doc.setTextColor(0);}
+    doc.autoTable({
+      startY:MT+27,head:[['Week','Original','Currently Covering','Notes / Holidays']],
+      body:sched.map((w,i)=>{const hols=getH(ct,i);const hn=hols.map(h=>h.nm+' ('+h.s+')').join('; ');let n='';if(w.switched&&hn)n='SWITCHED\n'+hn;else if(w.switched)n='SWITCHED: '+w.short;else n=hn;return[w.d,BASE[ct][i].r,w.cur,n];}),
+      margin:{left:ML,right:MR},theme:'grid',
+      headStyles:{fillColor:[37,99,235],textColor:255,fontStyle:'bold',fontSize:8.5,cellPadding:3},
+      bodyStyles:{fontSize:8,cellPadding:2.5,valign:'middle'},
+      columnStyles:{0:{cellWidth:27},1:{cellWidth:35},2:{cellWidth:37},3:{cellWidth:CW-27-35-37}},
+      didParseCell:data=>{if(data.section!=='body')return;const i=data.row.index;const w=sched[i];const hols=getH(ct,i);if(w.switched&&hols.length)data.cell.styles.fillColor=[255,230,200];else if(w.switched)data.cell.styles.fillColor=[254,243,199];else if(hols.length)data.cell.styles.fillColor=[245,243,255];if(w.switched&&data.column.index===2){data.cell.styles.fontStyle='bold';data.cell.styles.textColor=[37,99,235];}},
+      didDrawPage:foot
+    });
+    if(swList.length>0){
+      let ly=doc.lastAutoTable.finalY+10;if(ly>PH-50){doc.addPage();ly=MT+5;}
+      doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor(0);doc.text('Switch Log',ML,ly);
+      doc.autoTable({startY:ly+5,head:[['#','Resident A','Gives Up','Resident B','Gives Up','Recorded']],
+        body:swList.map((sw,i)=>[i+1,sw.rA,BASE[ct][sw.wA].d,sw.rB,BASE[ct][sw.wB].d,sw.ts?fmtDate(sw.ts):'--']),
+        margin:{left:ML,right:MR},theme:'striped',
+        headStyles:{fillColor:[240,242,248],textColor:[30,30,30],fontStyle:'bold',fontSize:8,cellPadding:2.5},
+        bodyStyles:{fontSize:8,cellPadding:2.5},alternateRowStyles:{fillColor:[248,250,252]},
+        columnStyles:{0:{cellWidth:8},1:{cellWidth:30},2:{cellWidth:26},3:{cellWidth:30},4:{cellWidth:26},5:{cellWidth:CW-120}},
+        didDrawPage:foot
+      });
+    }
+    let ly2=doc.lastAutoTable.finalY+10;if(ly2>PH-20){doc.addPage();ly2=MT+5;}
+    doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(60);doc.text('Color legend:',ML,ly2);doc.setFont('helvetica','normal');
+    [{c:[254,243,199],l:'Switch recorded'},{c:[245,243,255],l:'Holiday week'},{c:[255,230,200],l:'Switch + Holiday'}].forEach((b,bi)=>{
+      const bx=ML+28+bi*52;doc.setFillColor(...b.c);doc.setDrawColor(180,180,200);doc.rect(bx,ly2-3.5,5,4.5,'FD');doc.setTextColor(60);doc.text(b.l,bx+7,ly2);
+    });
+    doc.putTotalPages(TOTAL);
+    const safeLabel=label.replace(/[^a-zA-Z0-9]/g,'_');
+    const blob=doc.output('blob');const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download=`UCI_PMR_${safeLabel}_${now.toISOString().slice(0,10)}.pdf`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),2000);
+  }catch(e){console.error(e);if(err){err.textContent='PDF generation failed. Please try again.';err.style.display='block';}}
+  finally{if(btn){btn.textContent=orig;btn.disabled=false;}}
+}
+
+/* ═══ SCHEDULE VIEW ════════════════════════════════════════════ */
+function renderSched(ct){
+  const s=eff[ct],c=sws[ct]?.length||0;
+  const rows=s.map((w,i)=>{
+    const hols=getH(ct,i);
+    const holHtml=hols.map(h=>`<div class="holn">&#128197; ${h.nm} <span style="opacity:.7">${h.s}</span></div>`).join('');
+    const rc=(w.switched&&hols.length)?'sw hr':w.switched?'sw':hols.length?'hr':'';
+    return`<tr class="${rc}">
+      <td style="white-space:nowrap;font-variant-numeric:tabular-nums"><div>${w.d}</div>${holHtml}</td>
+      <td class="${w.switched?'xd':''}">${w.r}</td>
+      <td><span class="${w.switched?'curn':''}">${w.cur}</span>${w.switched?`<div class="swn">${w.short}</div>`:''}</td>
+      <td style="text-align:right"><button class="btn bsm ${w.switched?'btn-p':'btn-s'}" onclick="openModal('${ct}',${i})">${w.switched?'&#9998; View':'+ Switch'}</button></td>
+    </tr>`;
+  }).join('');
+  return`
+    <div class="rrow">
+      <div><div class="vt">${LABELS[ct]}${c>0?` <span class="badge ba">${c} switch${c!==1?'es':''}</span>`:''}</div>
+        <div class="vs">Click any week to record or view a switch &middot; Changes shared in real time</div></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button id="pdfbtn-${ct}" class="btn btn-pdf" onclick="generatePDF('${ct}')">&#128196; Generate PDF</button>
+        <button class="btn btn-s" onclick="doRefresh(this)">&#8635; Refresh</button>
+      </div>
+    </div>
+    <div id="pdferr-${ct}" class="pdf-err"></div>
+    <div class="hol-leg">&#128197; Purple rows contain holidays &mdash; sites that observe each holiday are noted</div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Week</th><th>Original</th><th>Currently Covering</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+/* ═══ MODAL ════════════════════════════════════════════════════ */
+function openModal(ct,idx){MS={ct,idx,coverBy:'',exchIdx:'',cf:false};renderModal();document.getElementById('ov').style.display='flex';}
+function closeModal(){document.getElementById('ov').style.display='none';}
+function renderModal(){
+  const{ct,idx,coverBy,exchIdx,cf}=MS;
+  const week=eff[ct][idx],orig=eff[ct][idx].cur,wHols=getH(ct,idx);
+  if(week.switched){
+    document.getElementById('modal').innerHTML=`
+      <div class="mhdr"><div><div class="mt">${week.d}${wHols.length?` <span class="bhol">&#128197; ${wHols.map(h=>h.nm).join(' / ')}</span>`:''}</div>
+        <div class="ms">${LABELS[ct]} &middot; Originally: ${week.r}</div></div>
+        <button class="xb" onclick="closeModal()">&times;</button></div>
+      <div class="swbox"><div style="font-weight:600;margin-bottom:4px">Switch on record</div><div>${week.full}</div>
+        ${week.ts?`<div class="tsn">Recorded: ${fmtTs(week.ts)}</div>`:''}</div>
+      ${cf?`<div class="cfbox"><div class="cft">&#9888; Confirm removal</div>
+        <div style="font-size:13px">Both residents will revert to their original assignments.</div>
+        <div class="cfa"><button class="btn btn-s" style="flex:1" onclick="MS.cf=false;renderModal()">Cancel</button>
+          <button class="btn btn-ds" style="flex:1" id="clrbtn" onclick="doDelete('${ct}','${week.swId}')">Yes, clear switch</button></div></div>`
+      :`<button class="btn btn-d" style="width:100%;padding:9px" onclick="MS.cf=true;renderModal()">&#128465; Clear This Switch</button>`}`;
+    return;
+  }
+  const residents=allRes(ct).filter(r=>r!==orig);
+  const exchWeeks=coverBy?eff[ct].map((w,i)=>({...w,i})).filter(w=>w.cur===coverBy&&w.i!==idx&&swapPairValid(orig,idx,coverBy,w.i,ct)):[];
+  let vhtml='';
+  if(coverBy&&exchIdx!==''){
+    const ei=parseInt(exchIdx);
+    const cf1=resCalls(coverBy).filter(c=>!(c.ct===ct&&c.i===ei)&&isAdj(c,ct,idx));
+    const cf2=resCalls(orig).filter(c=>!(c.ct===ct&&c.i===idx)&&isAdj(c,ct,ei));
+    const iss=[...cf1.map(c=>`${coverBy} has ${LABELS[c.ct]} the ${relLbl(c,ct,idx)} (${c.dates})`),
+               ...cf2.map(c=>`${orig} has ${LABELS[c.ct]} the ${relLbl(c,ct,ei)} (${c.dates})`)];
+    const eHols=getH(ct,ei);
+    vhtml=iss.length?`<div class="vb vw"><strong>&#9888; Conflicts:</strong><br>${iss.map(i=>`&bull; ${i}`).join('<br>')}</div>`
+      :`<div class="vb vok">&#10003; No back-to-back conflicts &mdash; ACGME compliant${eHols.length?`<br>&#128197; You would gain: ${eHols.map(h=>`<strong>${h.nm}</strong> (${h.s})`).join(', ')}`:''}</div>`;
+  }
+  const holNote=wHols.length?`<div style="margin-bottom:8px">${holChips(ct,idx)}</div><div style="font-size:11px;color:var(--purple);margin-bottom:10px">&#9888; You are giving up a holiday week</div>`:'';
+  document.getElementById('modal').innerHTML=`
+    <div class="mhdr"><div><div class="mt">${week.d}</div><div class="ms">${LABELS[ct]} &middot; Currently: ${orig}</div></div>
+      <button class="xb" onclick="closeModal()">&times;</button></div>
+    ${holNote}
+    <label class="fl" style="margin-top:${wHols.length?'4':'0'}px">This week will now be covered by:</label>
+    <select onchange="MS.coverBy=this.value;MS.exchIdx='';renderModal()">
+      <option value="">-- select resident --</option>
+      ${residents.map(r=>`<option value="${r}"${coverBy===r?' selected':''}>${r}</option>`).join('')}
+    </select>
+    ${coverBy?`<label class="fl">In exchange, ${orig} will cover which of ${coverBy}'s weeks?</label>
+      <select onchange="MS.exchIdx=this.value;renderModal()">
+        <option value="">-- select week --</option>
+        ${exchWeeks.map(w=>`<option value="${w.i}"${exchIdx==w.i?' selected':''}>${w.d}${holText(ct,w.i)}</option>`).join('')}
+      </select>
+      ${!exchWeeks.length?`<div style="font-size:12px;color:var(--red);margin-top:5px">No conflict-free weeks available for ${coverBy}.</div>`:''}`:''}
+    ${vhtml}
+    <div id="merr" class="merr"></div>
+    <div class="mact">
+      <button class="btn btn-s" style="flex:1;padding:9px" onclick="closeModal()">Cancel</button>
+      <button id="savebtn" class="btn btn-p" style="flex:1;padding:9px" ${coverBy&&exchIdx!==''?'':'disabled'} onclick="doSave()">&#10003; Record Switch</button>
+    </div>`;
+}
+async function doSave(){
+  const{ct,idx,coverBy,exchIdx}=MS;if(!coverBy||exchIdx==='')return;
+  const orig=eff[ct][idx].cur;
+  const sb=document.getElementById('savebtn');if(sb){sb.textContent='Saving...';sb.disabled=true;}
+  try{
+    const rec={id:Date.now().toString(),wA:idx,wB:parseInt(exchIdx),rA:orig,rB:coverBy,ts:new Date().toISOString()};
+    sws[ct]=[...(sws[ct]||[]),rec];await saveCt(ct);rebuildEff();closeModal();renderNav();renderMain();
+  }catch(e){
+    sws[ct]=(sws[ct]||[]).slice(0,-1);
+    const me=document.getElementById('merr');if(me){me.style.display='block';me.textContent='Could not save. Please try again.';}
+    if(sb){sb.textContent='Record Switch';sb.disabled=false;}
+  }
+}
+async function doDelete(ct,id){
+  const btn=document.getElementById('clrbtn');if(btn){btn.textContent='Clearing...';btn.disabled=true;}
+  try{sws[ct]=(sws[ct]||[]).filter(s=>s.id!==id);await saveCt(ct);rebuildEff();closeModal();renderNav();renderMain();}
+  catch{await loadAll();MS.cf=false;renderModal();}
+}
+async function doRefresh(btn){
+  if(btn){btn.textContent='Refreshing...';btn.disabled=true;}
+  await loadAll();renderNav();renderMain();
+}
+
+/* ═══ SWAP FINDER ══════════════════════════════════════════════ */
+function renderFinder(){
+  const f=F,sched=f.ct?eff[f.ct]:[];
+  let r2='';
+  if(f.ct&&f.wIdx!==''){
+    const idx=parseInt(f.wIdx),holder=eff[f.ct][idx].cur,swHols=getH(f.ct,idx);
+    const elig=[],inelig=[];
+    Object.entries(f.filter).forEach(([name,on])=>{
+      if(!on)return;
+      const valid=validExchWeeks(holder,idx,name,f.ct);
+      if(valid.length){elig.push({name,weeks:valid});}
+      else{
+        const cw=eff[f.ct].map((w,i)=>({...w,i})).filter(w=>w.cur===name&&w.i!==idx);
+        const iss=new Set();
+        if(!cw.length){
+          resCalls(name).filter(c=>isAdj(c,f.ct,idx)).forEach(c=>iss.add(`${name} has ${LABELS[c.ct]} the ${relLbl(c,f.ct,idx)} (${c.dates})`));
+          if(!iss.size)iss.add(`${name} has no weeks on this schedule to offer`);
+        }else{
+          cw.forEach(w=>{
+            resCalls(holder).filter(c=>!(c.ct===f.ct&&c.i===idx)&&isAdj(c,f.ct,w.i)).forEach(c=>iss.add(`${holder} has ${LABELS[c.ct]} the ${relLbl(c,f.ct,w.i)} (${c.dates}) - blocks taking ${w.d}`));
+            resCalls(name).filter(c=>!(c.ct===f.ct&&c.i===w.i)&&isAdj(c,f.ct,idx)).forEach(c=>iss.add(`${name} has ${LABELS[c.ct]} the ${relLbl(c,f.ct,idx)} (${c.dates})`));
+          });
+          if(!iss.size)iss.add('No conflict-free exchange weeks available');
+        }
+        inelig.push({name,reasons:[...iss]});
+      }
+    });
+    const swHolBanner=swHols.length?`<div style="margin-bottom:8px">${swHols.map(h=>`<span class="bhol">&#128197; ${h.nm} <span style="opacity:.65;font-weight:400">${h.s}</span></span>`).join(' ')} <span style="font-size:11px;color:var(--purple)"> &mdash; you are giving this up</span></div>`:'';
+    const hd=`<div class="rh">${eff[f.ct][idx].d} &mdash; currently: ${holder}</div>${swHolBanner}`;
+    const eH=elig.length?`<div class="sl">&#10003; Eligible</div>${elig.map(({name,weeks})=>`<div class="ri"><div class="rir"><span class="badge bg">eligible</span><strong>${name}</strong></div><div class="ris">${weeks.map(w=>`<span style="white-space:nowrap">${w.d}${holSummary(f.ct,w.i)}</span>`).join('&ensp;&middot;&ensp;')}</div></div>`).join('')}`:'';
+    const iH=inelig.length?`<div class="sl">&#10007; Ineligible</div>${inelig.map(({name,reasons})=>`<div class="ri"><div class="rir"><span class="badge br">blocked</span><strong>${name}</strong></div><div class="ris">${reasons.join('<br>')}</div></div>`).join('')}`:'';
+    const ns=Object.values(f.filter).every(v=>!v)?'<div>No residents selected.</div>':'';
+    r2=`<div class="rbox ${elig.length?'rok':'rwarn'}">${hd}${eH}${iH}${ns}</div>`;
+  }
+  let r3='';
+  if(f.mode==='3way'&&f.ct&&f.w1!==''&&f.w2!==''&&f.w3!==''){
+    const[i1,i2,i3]=[parseInt(f.w1),parseInt(f.w2),parseInt(f.w3)];
+    if(i1===i2||i1===i3||i2===i3){r3=`<div class="rbox rwarn">Select 3 different weeks.</div>`;}
+    else{
+      const[o1,o2,o3]=[eff[f.ct][i1].cur,eff[f.ct][i2].cur,eff[f.ct][i3].cur];
+      if(o1===o2||o1===o3||o2===o3){r3=`<div class="rbox rwarn">All 3 weeks must belong to different residents.</div>`;}
+      else{
+        function chkR(asns){let v=true;const iss=[];asns.forEach(({rec,gI,gvI})=>{resCalls(rec).filter(c=>!(c.ct===f.ct&&c.i===gvI)&&isAdj(c,f.ct,gI)).forEach(c=>{v=false;iss.push(`${rec} can't take ${eff[f.ct][gI].d}: ${LABELS[c.ct]} the ${relLbl(c,f.ct,gI)} (${c.dates})`);});});return{v,iss,asns};}
+        const rA=chkR([{rec:o1,gI:i2,gvI:i1},{rec:o2,gI:i3,gvI:i2},{rec:o3,gI:i1,gvI:i3}]);
+        const rB=chkR([{rec:o1,gI:i3,gvI:i1},{rec:o3,gI:i2,gvI:i3},{rec:o2,gI:i1,gvI:i2}]);
+        r3=[rA,rB].map((rot,ri)=>`<div class="rotb ${rot.v?'rotv':'rotn'}"><div class="roth"><span class="badge ${rot.v?'bg':'br'}">${rot.v?'&#10003; valid':'&#10007; blocked'}</span>Rotation option ${ri+1}</div>${rot.asns.map(({rec,gI,gvI})=>`<div class="rotr">&rarr; <strong>${rec}</strong><span class="rotrs" style="margin-left:6px">gives ${eff[f.ct][gvI].d} &middot; receives ${eff[f.ct][gI].d}${holText(f.ct,gI)}</span></div>`).join('')}${!rot.v?`<div class="roti">${rot.iss.map(i=>`<div>&bull; ${i}</div>`).join('')}</div>`:''}</div>`).join('');
+      }
+    }
+  }
+  const fH=f.ct&&f.wIdx!==''&&Object.keys(f.filter).length?`<div class="card" style="background:var(--surface2)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:13px;font-weight:600">Filter residents</span><div style="display:flex;gap:5px"><button class="btn btn-s bsm" onclick="setAllF(true)">All</button><button class="btn btn-s bsm" onclick="setAllF(false)">None</button></div></div><div class="fg">${Object.entries(f.filter).map(([n,on])=>`<div class="cbi${on?' on':''}" onclick="togF('${n}')"><input type="checkbox" ${on?'checked':''} style="width:12px;height:12px;pointer-events:none;accent-color:var(--accent)"><span>${n}</span></div>`).join('')}</div></div>`:'';
+  return`
+    <div class="mtabs">
+      <button class="nb${f.mode==='2way'?' on':''}" onclick="setFM('2way')">2-way swap</button>
+      <button class="nb${f.mode==='3way'?' on':''}" onclick="setFM('3way')">3-way swap</button>
+    </div>
+    <div class="card">
+      <span class="clbl" style="margin-top:0">Call type</span>
+      <select onchange="setFCt(this.value)">
+        <option value="">-- select --</option>
+        <option value="uci_primary"${f.ct==='uci_primary'?' selected':''}>UCI Primary Call</option>
+        <option value="lbm"${f.ct==='lbm'?' selected':''}>LBM Call</option>
+        <option value="uci_consult"${f.ct==='uci_consult'?' selected':''}>UCI Consult Call</option>
+      </select>
+      ${f.mode==='2way'?`<span class="clbl">Week to swap away</span><select onchange="setFW(this.value)"><option value="">-- select call type first --</option>${sched.map((w,i)=>`<option value="${i}"${f.wIdx==i?' selected':''}>${w.d} - ${w.cur}${w.switched?' (switched)':''}${holText(f.ct,i)}</option>`).join('')}</select>`:''}
+      ${f.mode==='3way'&&f.ct?`<span class="clbl">Select 3 weeks</span><div class="tg">${[{v:f.w1,n:1,k:'w1'},{v:f.w2,n:2,k:'w2'},{v:f.w3,n:3,k:'w3'}].map(({v,n,k})=>`<div><label style="font-size:11px;color:var(--text3);display:block;margin-bottom:4px">Week ${n}</label><select onchange="F.${k}=this.value;renderMain()"><option value="">--</option>${sched.map((w,i)=>`<option value="${i}"${v==i?' selected':''}>${w.d} - ${w.cur}${holText(f.ct,i)}</option>`).join('')}</select></div>`).join('')}</div>`:''}
+    </div>${fH}${r2}${r3}`;
+}
+function setFM(m){F={...F,mode:m,w1:'',w2:'',w3:''};renderMain();}
+function setFCt(v){F={...F,ct:v,wIdx:'',filter:{},w1:'',w2:'',w3:''};renderMain();}
+function setFW(v){F.wIdx=v;if(v!==''&&F.ct){const o=eff[F.ct][parseInt(v)].cur;F.filter=Object.fromEntries(allRes(F.ct).filter(r=>r!==o).map(r=>[r,true]));}else F.filter={};renderMain();}
+function togF(n){F.filter[n]=!F.filter[n];renderMain();}
+function setAllF(v){Object.keys(F.filter).forEach(k=>F.filter[k]=v);renderMain();}
+
+/* ═══ MAIN ══════════════════════════════════════════════════════ */
+function renderMain(){document.getElementById('main').innerHTML=['lbm','uci_primary','uci_consult'].includes(view)?renderSched(view):renderFinder();}
+(async()=>{await initStorage();updateBadge();rebuildEff();renderNav();renderMain();await loadAll();renderNav();renderMain();})();
+</script>
+</body>
+</html>
